@@ -4,7 +4,9 @@ import './plugins/vuetify'
 import './plugins/vuetify'
 import './plugins/axios'
 import App from './App.vue'
-
+import VuePersist from 'vue-persist'
+ 
+Vue.use(VuePersist)
 Vue.config.productionTip = false
 
 new Vue({
