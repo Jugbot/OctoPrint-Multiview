@@ -55,35 +55,39 @@
       </v-btn>
     </v-content> -->
 
-    <!-- Printer View -->
+    <!-- Printer Status Card -->
     <v-content>
       <v-container fluid grid-list-sm>
         <v-layout row wrap>
             <v-flex v-for="(printer, name) in printers" xs4>
               <v-card>
-                <v-layout>
-                  <v-flex xs7>
-                    <v-card-title primary-title>
-                        <h3 class="headline mb-0">Printer {{name}}</h3>
-                        <div class="subheading" :style="{ color: status_color(printer.status)}">
-                          {{printer.status}}
-                        </div>
-                    </v-card-title>
-                  </v-flex>
-                  <v-flex xs5>
-                    <v-card-text>
-                      <div>
-                        <div class="subheading">{{printer.progress.printTime}}</div>
-                        <div class="headline text--indigo">{{printer.progress.printTimeLeft}}</div>
+                <v-card-title>
+                  <v-layout column>
+                    <v-flex>
+                      <h3 class="headline">Printer <span class="font-weight-light">{{name}}</span></h3>
+                    </v-flex>
+                    <v-flex>
+                      <div class="subheading" :style="{ color: status_color(printer.status)}">
+                        {{printer.status}}
                       </div>
-                    </v-card-text>
+                    </v-flex>
+                  </v-layout>
+                </v-card-title>
+                <v-layout justify-space-between row class="px-2">
+                  <v-flex>
+                    <div class="font-weight-thin">
+                      {{printer.progress.printTime | date}}
+                    </div>
+                  </v-flex>
+                  <v-flex>
+                    <div class="font-weight-thin text-xs-right">
+                      {{printer.progress.printTimeLeft | date}}
+                    </div>
                   </v-flex>
                 </v-layout>
-                <v-card-text primary-title>
-                    <v-progress-linear
-                    :value="printer.progress.completion||0"
-                    ></v-progress-linear>
-                </v-card-text>
+                <v-progress-linear class="my-0"
+                :value="printer.progress.completion||0"
+                ></v-progress-linear>
               </v-card>
             </v-flex>
         </v-layout>
@@ -126,7 +130,17 @@
             printTime: 276,
             printTimeLeft: 7
           }
-        }
+        },
+        'A2': {port: 5000},
+        'A4': {port: 5000},
+        'B1': {port: 5000},
+        'GAMMA': {port: 5000},
+        'Omega': {port: 5000},
+        'back corner': {port: 5000},
+        'etc': {port: 5000},
+        'ZYX': {port: 5000},
+        'Z9': {port: 5000},
+        '00': {port: 5000},
       },
       data: null,
       //UI temp settings
@@ -148,11 +162,12 @@
         .then(response => {
           printer.status = response.data.state
           if (response.data) {
-            printer.job = response.data.update_job
+            printer.job = response.data.job
             printer.progress = response.data.progress
           }
         })
         .catch(error => {
+          printer.status = "Offline"
           console.error(error);
         });
       },
@@ -161,11 +176,10 @@
           case "Offline":
             return "red"
           case "Operational":
-            return ""
+            return "skyblue"
           case "Printing":
             return "lime"
           default:
-            console.log(status)
             return "yellow"
         }
       }
@@ -180,6 +194,10 @@
     filters: {
       date(seconds) {
         return (new Date(seconds * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
+      },
+      expected_date(seconds) {
+        var timeObject = new Date();
+        return (new Date(timeObject.getTime() + seconds * 1000)).toUTCString();
       }
     },
     mounted() {
@@ -188,6 +206,9 @@
   }
 </script>
 
+<style>
+
+</style>
 <!-- GET api/job
 {
   "job": {
