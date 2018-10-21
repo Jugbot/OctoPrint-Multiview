@@ -1,49 +1,50 @@
 <template>
   <v-app id="inspire" dark>
 
-    <!-- Toolbar and Settings -->
+    <!-- Toolbar -->
     <v-toolbar app fixed clipped-left>
-      <!-- <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon> -->
       <v-spacer></v-spacer>
       <v-toolbar-title>MultiView</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-items class="hidden-sm-and-down">
-        <v-dialog v-model="settings">
-          <v-btn fab small dark color="blue" slot="activator">
-            <v-icon dark>settings</v-icon>
-          </v-btn>
-          <v-card>
-            <v-card-title
-              class="headline"
-              primary-title>
-              Settings
-              <v-spacer></v-spacer>
-              <v-btn
-                color="primary"
-                @click="settings = false">
-                <v-icon dark>check</v-icon>
-              </v-btn>
-            </v-card-title>
-
-            <v-divider></v-divider>
-            <v-card-text>
-              <v-text-field
-                v-model="auth.api_key"
-                label="Api-Key"
-                box
-              ></v-text-field>
-            <v-card-text>
-            </v-card-text>
-              <v-text-field
-                v-model="auth.host"
-                label="Host Url"
-                box
-              ></v-text-field>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
+      <v-toolbar-items>
+        <v-btn fab small dark color="blue" @click.stop="settings=true">
+          <v-icon dark>settings</v-icon>
+        </v-btn>
       </v-toolbar-items>
     </v-toolbar>
+
+    <!-- Settings -->
+    <v-dialog v-model="settings">
+      <v-card>
+        <v-card-title
+          class="headline"
+          primary-title>
+          Settings
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            @click="settings = false">
+            <v-icon dark>check</v-icon>
+          </v-btn>
+        </v-card-title>
+
+        <v-divider></v-divider>
+        <v-card-text>
+          <v-text-field
+            v-model="auth.api_key"
+            label="Api-Key"
+            box
+          ></v-text-field>
+        <v-card-text>
+        </v-card-text>
+          <v-text-field
+            v-model="auth.host"
+            label="Host Url"
+            box
+          ></v-text-field>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 
     <!-- ADD Printer -->
     <!-- <v-content>
